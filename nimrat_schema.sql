@@ -1,18 +1,16 @@
 CREATE TABLE IF NOT EXISTS movies(
 
 );
-CREATE TABLE IF NOT EXISTS theatres(
-    "id" INTEGER,
-    "name" TEXT NOT NULL,
-    "location" TEXT NOT NULL,
-    PRIMARY KEY("id")
+CREATE TABLE IF NOT EXISTS Theatres(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name TEXT NOT NULL,
+    location TEXT NOT NULL
 );
-CREATE TABLE IF NOT EXISTS audis(
-    "id" INTEGER,
-    "name" TEXT,
-    "theatre_id" INTEGER NOT NULL,
-    PRIMARY KEY("id"),
-    FOREIGN KEY("theatre_id") REFERENCES "theatres"("id")
+CREATE TABLE IF NOT EXISTS Audis(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name TEXT,
+    theatre_id INTEGER NOT NULL,
+    FOREIGN KEY(theatre_id) REFERENCES theatres(id)
 );
 CREATE TABLE IF NOT EXISTS seats(
 
