@@ -1,11 +1,11 @@
 -- State Table
-CREATE TABLE IF NOT EXISTS States (
+CREATE TABLE States (
   id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
   name VARCHAR(50) UNIQUE NOT NULL
 );
 
 -- City Table
-CREATE TABLE IF NOT EXISTS Cities (
+CREATE TABLE Cities (
   id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
   name VARCHAR(75) NOT NULL,
   state_id INTEGER NOT NULL,
@@ -13,13 +13,13 @@ CREATE TABLE IF NOT EXISTS Cities (
 );
 
 -- Genre Table
-CREATE TABLE IF NOT EXISTS Genres (
+CREATE TABLE Genres (
   id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
   name VARCHAR(50) UNIQUE NOT NULL
 );
 
 -- Customer Table
-CREATE TABLE IF NOT EXISTS Customers (
+CREATE TABLE Customers (
   id VARCHAR(30) PRIMARY KEY NOT NULL,
   name VARCHAR(255) NOT NULL,
   email VARCHAR(255) UNIQUE NOT NULL,
@@ -31,13 +31,13 @@ CREATE TABLE IF NOT EXISTS Customers (
 );
 
 -- Language Table
-CREATE TABLE IF NOT EXISTS Languages (
+CREATE TABLE Languages (
   id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
   name VARCHAR(50) UNIQUE NOT NULL
 );
 
 -- Movie Table
-CREATE TABLE IF NOT EXISTS Movies (
+CREATE TABLE Movies (
   id VARCHAR(20) PRIMARY KEY NOT NULL,
   title VARCHAR(255) NOT NULL,
   director VARCHAR(255),
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS Movies (
 );
 
 -- Rating Table (Review Table)
-CREATE TABLE IF NOT EXISTS Reviews (
+CREATE TABLE Reviews (
   id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
   customer_id VARCHAR(30), -- can be null for anonymous reviews
   movie_id VARCHAR(20) NOT NULL,
@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS Reviews (
 );
 
 -- Theatre Table
-CREATE TABLE IF NOT EXISTS Theatres (
+CREATE TABLE Theatres (
   id VARCHAR(20) PRIMARY KEY NOT NULL,
   name VARCHAR(255) NOT NULL,
   city_id INTEGER NOT NULL,
@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS Theatres (
 );
 
 -- Audi Table
-CREATE TABLE IF NOT EXISTS Audis (
+CREATE TABLE Audis (
   id VARCHAR(30) PRIMARY KEY NOT NULL,
   name VARCHAR(20) NOT NULL,
   theatre_id VARCHAR(20) NOT NULL,
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS Audis (
 );
 
 -- Seats Table
-CREATE TABLE IF NOT EXISTS Seats (
+CREATE TABLE Seats (
   id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
   name VARCHAR(5) NOT NULL,
   audi_id VARCHAR(30) NOT NULL,
@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS Seats (
 );
 
 -- Show Table
-CREATE TABLE IF NOT EXISTS Shows (
+CREATE TABLE Shows (
   id VARCHAR(40) PRIMARY KEY NOT NULL,
   movie_id VARCHAR(20) NOT NULL,
   audi_id VARCHAR(30) NOT NULL,
@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS Shows (
 );
 
 -- Tickets Table 
-CREATE TABLE IF NOT EXISTS Tickets (
+CREATE TABLE Tickets (
   id VARCHAR(40) PRIMARY KEY NOT NULL,
   show_id VARCHAR(40) NOT NULL,
   seat_id INTEGER NOT NULL, 
@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS Tickets (
 ); 
 
 -- Bookings Table
-CREATE TABLE IF NOT EXISTS Bookings (
+CREATE TABLE Bookings (
   id VARCHAR(40) PRIMARY KEY,
   customer_id VARCHAR(30) NOT NULL,
   status VARCHAR(20) NOT NULL CHECK (status IN ('booked', 'cancelled', 'held', 'dropped')),
@@ -120,7 +120,7 @@ CREATE TABLE IF NOT EXISTS Bookings (
 );
 
 -- Movie_Genre Table (Many-to-Many)
-CREATE TABLE IF NOT EXISTS Movie_Genre (
+CREATE TABLE Movie_Genre (
   movie_id VARCHAR(20) NOT NULL,
   genre_id INTEGER NOT NULL,
   FOREIGN KEY (movie_id) REFERENCES Movies(id),
@@ -129,7 +129,7 @@ CREATE TABLE IF NOT EXISTS Movie_Genre (
 );
 
 -- Movie_Language Table (Many-to-Many)
-CREATE TABLE IF NOT EXISTS Movie_Language (
+CREATE TABLE Movie_Language (
   movie_id VARCHAR(20) NOT NULL,
   language_id INTEGER NOT NULL,
   FOREIGN KEY (movie_id) REFERENCES Movies(id),
@@ -138,7 +138,7 @@ CREATE TABLE IF NOT EXISTS Movie_Language (
 );
 
 -- Booking_Ticket Table
-CREATE TABLE IF NOT EXISTS Booking_Ticket (
+CREATE TABLE Booking_Ticket (
   booking_id VARCHAR(40) NOT NULL,
   ticket_id VARCHAR(40) NOT NULL,
   FOREIGN KEY (booking_id) REFERENCES Bookings(id),
