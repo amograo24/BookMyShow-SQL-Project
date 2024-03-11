@@ -17,7 +17,6 @@ CREATE TABLE Cities (
 CREATE TABLE Genres (
   id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
   name VARCHAR(50) UNIQUE NOT NULL
-  -- let the name itself be the ID? also it should be unique...same applies for state?
 );
 
 -- Customer Table
@@ -27,9 +26,9 @@ CREATE TABLE Customers (
   email VARCHAR(255) UNIQUE NOT NULL,
   phone_number VARCHAR(14) UNIQUE NOT NULL,
   date_of_birth DATE NOT NULL,
-  date_of_joining DATETIME NOT NULL,
+  date_of_joining DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   gender CHAR(1) NOT NULL,
-  CHECK ((email LIKE '%@%') AND (phone_number GLOB '+[0-9]*') AND (gender in ('M', 'F', 'O')) AND (LENGTH(phone_number)>=13)),
+  CHECK ((email LIKE '%@%') AND (phone_number GLOB '+[0-9]*') AND (gender in ('M', 'F', 'O')) AND (LENGTH(phone_number)>=12)),
 
   -- CONSTRAINT chk_email CHECK (email LIKE '%@%'),
   -- CONSTRAINT chk_phone CHECK (phone_number GLOB '+[0-9]*'),
@@ -51,9 +50,10 @@ CREATE TABLE Movies (
   title VARCHAR(255) NOT NULL,
   director VARCHAR(255),
   avg_rating DECIMAL(4, 2), -- this we gotta check once
-  release_date DATE NOT NULL,
-  duration TIME NOT NULL,
+  release_date DATE NOT NULL, -- 'yyyy-mm-dd'
+  duration TIME NOT NULL, -- 'hh:mm:ss'
   certification VARCHAR(3) NOT NULL CHECK (certification IN ('U', 'U/A', 'A', 'S')),
+  CHECK (avg_rating >= 0 AND avg_rating <= 10)
 );
 
 -- Rating Table (Review Table)
@@ -66,6 +66,7 @@ CREATE TABLE Reviews (
   comment TEXT,
   FOREIGN KEY (customer_id) REFERENCES Customers(id), 
   FOREIGN KEY (movie_id) REFERENCES Movies(id)
+  CHECK (rating >= 0 AND rating <= 10)
 );
 
 -- Theatre Table
@@ -80,9 +81,8 @@ CREATE TABLE Theatres (
 -- Audi Table
 CREATE TABLE Audis (
   id VARCHAR(30) PRIMARY KEY NOT NULL,
-  name VARCHAR(50) NOT NULL,
+  name VARCHAR(20) NOT NULL,
   theatre_id VARCHAR(20) NOT NULL,
-  total_seats INT NOT NULL,
   FOREIGN KEY (theatre_id) REFERENCES Threatres(id)
 );
 
@@ -101,7 +101,8 @@ CREATE TABLE Shows (
   audi_id VARCHAR(30) NOT NULL,
   time_start DATETIME NOT NULL,
   time_end DATETIME NOT NULL,
-  available_seats INT NOT NULL,
+  -- available_seats INT NOT NULL DEFAULT (SELECT COUNT(*) FROM Seats WHERE audi_id = Shows.audi_id),
+  available_seats INT NOT NULL DEFAULT 0,
   FOREIGN KEY (movie_id) REFERENCES Movies(id),
   FOREIGN KEY (audi_id) REFERENCES Audis(id),
   CHECK (time_end > time_start AND available_seats >= 0)

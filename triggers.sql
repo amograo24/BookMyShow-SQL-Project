@@ -11,30 +11,13 @@ BEGIN
   WHERE id = NEW.movie_id;
 END;
 
--- update available seats and ticket booked status if booking cancelled/dropped
-CREATE TRIGGER update_show_available_seats_and_tickets_deleted
+
+
+CREATE TRIGGER update_post_cancelled_booking
 AFTER UPDATE OF status ON Bookings
 WHEN OLD.status IN ('cancelled', 'dropped')
 FOR EACH ROW
 BEGIN
-    UPDATE Shows
-    SET available_seats = available_seats + (
-        SELECT COUNT(*)
-        FROM Booking_Ticket bt
-        JOIN Tickets t ON bt.ticket_id = t.id
-        WHERE bt.booking_id = OLD.id
-        AND t.booked = 1
-    )
-    WHERE id = (
-        SELECT show_id
-        FROM Tickets
-        WHERE id = (
-            SELECT ticket_id
-            FROM Booking_Ticket
-            WHERE booking_id = OLD.id
-        )
-    );
-
     UPDATE Tickets
     SET booked = 0
     WHERE id IN (
@@ -42,32 +25,22 @@ BEGIN
         FROM Booking_Ticket
         WHERE booking_id = OLD.id
     );
+
+    UPDATE Shows
+    SET available_seats = (
+        SELECT COUNT(*) 
+        FROM Tickets 
+        WHERE show_id = OLD.show_id AND booked = 0
+    )
+    WHERE id = OLD.show_id;
 END;
 
--- update available seats and ticket booked status if booking booked/held
-CREATE TRIGGER update_show_available_seats_and_tickets_added
+
+CREATE TRIGGER update_post_booking
 AFTER UPDATE OF status ON Bookings
 WHEN OLD.status IN ('booked', 'held')
 FOR EACH ROW
 BEGIN
-    UPDATE Shows
-    SET available_seats = available_seats - (
-        SELECT COUNT(*)
-        FROM Booking_Ticket bt
-        JOIN Tickets t ON bt.ticket_id = t.id
-        WHERE bt.booking_id = OLD.id
-        AND t.booked = 0
-    )
-    WHERE id = (
-        SELECT show_id
-        FROM Tickets
-        WHERE id = (
-            SELECT ticket_id
-            FROM Booking_Ticket
-            WHERE booking_id = OLD.id
-        )
-    );
-
     UPDATE Tickets
     SET booked = 1
     WHERE id IN (
@@ -75,7 +48,62 @@ BEGIN
         FROM Booking_Ticket
         WHERE booking_id = OLD.id
     );
+
+    UPDATE Shows
+    SET available_seats = (
+        SELECT COUNT(*) 
+        FROM Tickets 
+        WHERE show_id = OLD.show_id AND booked = 0
+    )
+    WHERE id = OLD.show_id;
 END;
+
+CREATE TRIGGER update_available_seats_post_show_addition AFTER INSERT ON Shows
+FOR EACH ROW
+BEGIN
+  UPDATE Shows
+  SET available_seats = (
+    SELECT COUNT(*)
+    FROM Seats
+    WHERE audi_id = NEW.audi_id
+  )
+  WHERE id = NEW.id;
+END;
+
+
+
+-- -- update available seats and ticket booked status if booking booked/held
+-- CREATE TRIGGER update_show_available_seats_and_tickets_added
+-- AFTER UPDATE OF status ON Bookings
+-- WHEN OLD.status IN ('booked', 'held')
+-- FOR EACH ROW
+-- BEGIN
+--     UPDATE Shows
+--     SET available_seats = available_seats - (
+--         SELECT COUNT(*)
+--         FROM Booking_Ticket bt
+--         JOIN Tickets t ON bt.ticket_id = t.id
+--         WHERE bt.booking_id = OLD.id
+--         AND t.booked = 0
+--     )
+--     WHERE id = (
+--         SELECT show_id
+--         FROM Tickets
+--         WHERE id = (
+--             SELECT ticket_id
+--             FROM Booking_Ticket
+--             WHERE booking_id = OLD.id
+--         )
+--     );
+
+--     UPDATE Tickets
+--     SET booked = 1
+--     WHERE id IN (
+--         SELECT ticket_id
+--         FROM Booking_Ticket
+--         WHERE booking_id = OLD.id
+--     );
+-- END;
 
 
 
@@ -116,3 +144,39 @@ END;
 -- END $$
 
 -- DELIMITER ;
+
+
+
+----
+-- update available seats and ticket booked status if booking cancelled/dropped
+-- CREATE TRIGGER update_show_available_seats_and_tickets_deleted
+-- AFTER UPDATE OF status ON Bookings
+-- WHEN OLD.status IN ('cancelled', 'dropped')
+-- FOR EACH ROW
+-- BEGIN
+--     UPDATE Shows
+--     SET available_seats = available_seats + (
+--         SELECT COUNT(*)
+--         FROM Booking_Ticket bt
+--         JOIN Tickets t ON bt.ticket_id = t.id
+--         WHERE bt.booking_id = OLD.id
+--         AND t.booked = 1
+--     )
+--     WHERE id = (
+--         SELECT show_id
+--         FROM Tickets
+--         WHERE id = (
+--             SELECT ticket_id
+--             FROM Booking_Ticket
+--             WHERE booking_id = OLD.id
+--         )
+--     );
+
+--     UPDATE Tickets
+--     SET booked = 0
+--     WHERE id IN (
+--         SELECT ticket_id
+--         FROM Booking_Ticket
+--         WHERE booking_id = OLD.id
+--     );
+-- END;
