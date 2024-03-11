@@ -1,27 +1,27 @@
 -- CHANGE FOREIGN KEY TYPES (done?)
 -- State Table
-CREATE TABLE State (
+CREATE TABLE States (
   id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
   name VARCHAR(50) UNIQUE NOT NULL 
 );
 
 -- City Table
-CREATE TABLE City (
+CREATE TABLE Cities (
   id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
   name VARCHAR(75) NOT NULL,
   state_id INT NOT NULL,
-  FOREIGN KEY (state_id) REFERENCES State(id)
+  FOREIGN KEY (state_id) REFERENCES States(id)
 );
 
 -- Genre Table
-CREATE TABLE Genre (
+CREATE TABLE Genres (
   id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
   name VARCHAR(50) UNIQUE NOT NULL
   -- let the name itself be the ID? also it should be unique...same applies for state?
 );
 
 -- Customer Table
-CREATE TABLE Customer (
+CREATE TABLE Customers (
   id VARCHAR(30) PRIMARY KEY NOT NULL,
   name VARCHAR(255) NOT NULL,
   email VARCHAR(255) UNIQUE NOT NULL,
@@ -40,13 +40,13 @@ CREATE TABLE Customer (
 );
 
 -- Language Table
-CREATE TABLE Language (
+CREATE TABLE Languages (
   id INT PRIMARY KEY AUTO_INCREMENT,
   name VARCHAR(50) UNIQUE NOT NULL
 );
 
 -- Movie Table
-CREATE TABLE Movie (
+CREATE TABLE Movies (
   id VARCHAR(20) PRIMARY KEY NOT NULL,
   title VARCHAR(255) NOT NULL,
   director VARCHAR(255),
@@ -64,26 +64,26 @@ CREATE TABLE Reviews (
   rating DECIMAL(4, 2) NOT NULL,
   time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,  
   comment TEXT,
-  FOREIGN KEY (customer_id) REFERENCES Customer(id), 
-  FOREIGN KEY (movie_id) REFERENCES Movie(id)
+  FOREIGN KEY (customer_id) REFERENCES Customers(id), 
+  FOREIGN KEY (movie_id) REFERENCES Movies(id)
 );
 
 -- Theatre Table
-CREATE TABLE Theatre (
+CREATE TABLE Theatres (
   id VARCHAR(20) PRIMARY KEY NOT NULL,
   name VARCHAR(255) NOT NULL,
   city_id INT NOT NULL,
   address TEXT NOT NULL,
-  FOREIGN KEY (city_id) REFERENCES City(id)
+  FOREIGN KEY (city_id) REFERENCES Cities(id)
 );
 
 -- Audi Table
-CREATE TABLE Audi (
+CREATE TABLE Audis (
   id VARCHAR(30) PRIMARY KEY NOT NULL,
   name VARCHAR(50) NOT NULL,
   theatre_id VARCHAR(20) NOT NULL,
   total_seats INT NOT NULL,
-  FOREIGN KEY (theatre_id) REFERENCES Threatre(id)
+  FOREIGN KEY (theatre_id) REFERENCES Threatres(id)
 );
 
 -- Seats Table
@@ -91,19 +91,19 @@ CREATE TABLE Seats (
   id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
   name VARCHAR(5) NOT NULL,
   audi_id VARCHAR(30) NOT NULL,
-  FOREIGN KEY (audi_id) REFERENCES Audi(id)
+  FOREIGN KEY (audi_id) REFERENCES Audis(id)
 );
 
 -- Show Table
-CREATE TABLE Show (
+CREATE TABLE Shows (
   id VARCHAR(40) PRIMARY KEY NOT NULL,
   movie_id VARCHAR(20) NOT NULL,
   audi_id VARCHAR(30) NOT NULL,
   time_start DATETIME NOT NULL,
   time_end DATETIME NOT NULL,
   available_seats INT NOT NULL,
-  FOREIGN KEY (movie_id) REFERENCES Movie(id),
-  FOREIGN KEY (audi_id) REFERENCES Audi(id),
+  FOREIGN KEY (movie_id) REFERENCES Movies(id),
+  FOREIGN KEY (audi_id) REFERENCES Audis(id),
   CHECK (time_end > time_start AND available_seats >= 0)
 );
 
@@ -115,7 +115,7 @@ CREATE TABLE Tickets (
 --  customer_id INT NOT NULL, 
  booked BOOLEAN DEFAULT FALSE NOT NULL,
  price DECIMAL(10, 2) NOT NULL CHECK(price >= 0),
- FOREIGN KEY (show_id) REFERENCES Show(id),
+ FOREIGN KEY (show_id) REFERENCES Shows(id),
  FOREIGN KEY (seat_id) REFERENCES Seats(id),
 --  FOREIGN KEY (customer_id) REFERENCES Customer(id) 
 ); 
@@ -126,7 +126,7 @@ CREATE TABLE Bookings (
   customer_id VARCHAR(30) NOT NULL,
   status VARCHAR(20) NOT NULL CHECK (status IN ('booked', 'cancelled', 'held', 'dropped')), -- held ka dekhna padega
   booking_datetime DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (customer_id) REFERENCES Customer(id),
+  FOREIGN KEY (customer_id) REFERENCES Customers(id),
   -- FOREIGN KEY (ticket_id) REFERENCES Tickets(id) 
 );
 
@@ -134,8 +134,8 @@ CREATE TABLE Bookings (
 CREATE TABLE Movie_Genre (
   movie_id VARCHAR(20) NOT NULL,
   genre_id INT NOT NULL,
-  FOREIGN KEY (movie_id) REFERENCES Movie(id),
-  FOREIGN KEY (genre_id) REFERENCES Genre(id),
+  FOREIGN KEY (movie_id) REFERENCES Movies(id),
+  FOREIGN KEY (genre_id) REFERENCES Genres(id),
   PRIMARY KEY (movie_id, genre_id) NOT NULL
 );
 
@@ -143,8 +143,8 @@ CREATE TABLE Movie_Genre (
 CREATE TABLE Movie_Language (
   movie_id VARCHAR(20) NOT NULL,
   language_id INT NOT NULL,
-  FOREIGN KEY (movie_id) REFERENCES Movie(id),
-  FOREIGN KEY (language_id) REFERENCES Language(id),
+  FOREIGN KEY (movie_id) REFERENCES Movies(id),
+  FOREIGN KEY (language_id) REFERENCES Languages(id),
   PRIMARY KEY (movie_id, language_id) NOT NULL
 );
 
