@@ -45,7 +45,7 @@ BEGIN
 END;
 
 -- update available seats and ticket booked status if booking booked/held
-CREATE TRIGGER update_show_available_seats_and_tickets_deleted
+CREATE TRIGGER update_show_available_seats_and_tickets_added
 AFTER UPDATE OF status ON Bookings
 WHEN OLD.status IN ('booked', 'held')
 FOR EACH ROW
