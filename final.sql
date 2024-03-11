@@ -112,12 +112,10 @@ CREATE TABLE Tickets (
  id VARCHAR(40) PRIMARY KEY NOT NULL,
  show_id VARCHAR(40) NOT NULL,
  seat_id INT NOT NULL,
---  customer_id INT NOT NULL, 
  booked BOOLEAN DEFAULT FALSE NOT NULL,
  price DECIMAL(10, 2) NOT NULL CHECK(price >= 0),
  FOREIGN KEY (show_id) REFERENCES Shows(id),
  FOREIGN KEY (seat_id) REFERENCES Seats(id),
---  FOREIGN KEY (customer_id) REFERENCES Customer(id) 
 ); 
 
 -- Bookings Table
@@ -127,7 +125,6 @@ CREATE TABLE Bookings (
   status VARCHAR(20) NOT NULL CHECK (status IN ('booked', 'cancelled', 'held', 'dropped')), -- held ka dekhna padega
   booking_datetime DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (customer_id) REFERENCES Customers(id),
-  -- FOREIGN KEY (ticket_id) REFERENCES Tickets(id) 
 );
 
 -- Movie_Genre Table (Many-to-Many)
