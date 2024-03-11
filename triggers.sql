@@ -1,5 +1,6 @@
 -- update average rating
-CREATE TRIGGER update_movie_avg AFTER INSERT ON Reviews
+CREATE TRIGGER update_movie_avg 
+AFTER INSERT ON Reviews
 FOR EACH ROW
 BEGIN
   UPDATE Movies
@@ -32,13 +33,22 @@ BEGIN
         FROM Tickets 
         WHERE show_id = OLD.show_id AND booked = 0
     )
-    WHERE id = OLD.show_id;
+    -- WHERE id = OLD.ticket_id.show_id;
+    WHERE id = (
+        SELECT show_id
+        FROM Tickets
+        WHERE id = (
+            SELECT ticket_id
+            FROM Booking_Ticket
+            WHERE booking_id = OLD.id
+        )
+    )
 END;
 
 
 CREATE TRIGGER update_post_booking
-AFTER UPDATE OF status ON Bookings
-WHEN OLD.status IN ('booked', 'held')
+AFTER INSERT ON Bookings
+WHEN NEW.status IN ('booked', 'held')
 FOR EACH ROW
 BEGIN
     UPDATE Tickets
@@ -46,16 +56,25 @@ BEGIN
     WHERE id IN (
         SELECT ticket_id
         FROM Booking_Ticket
-        WHERE booking_id = OLD.id
+        WHERE booking_id = NEW.id
     );
 
     UPDATE Shows
     SET available_seats = (
         SELECT COUNT(*) 
         FROM Tickets 
-        WHERE show_id = OLD.show_id AND booked = 0
+        WHERE show_id = NEW.show_id AND booked = 0
     )
-    WHERE id = OLD.show_id;
+    -- WHERE id = NEW.show_id;
+    WHERE id = (
+        SELECT show_id
+        FROM Tickets
+        WHERE id = (
+            SELECT ticket_id
+            FROM Booking_Ticket
+            WHERE booking_id = OLD.id
+        )
+    )
 END;
 
 CREATE TRIGGER update_available_seats_post_show_addition AFTER INSERT ON Shows
@@ -72,7 +91,7 @@ END;
 
 
 
--- -- update available seats and ticket booked status if booking booked/held
+-- update available seats and ticket booked status if booking booked/held
 -- CREATE TRIGGER update_show_available_seats_and_tickets_added
 -- AFTER UPDATE OF status ON Bookings
 -- WHEN OLD.status IN ('booked', 'held')
