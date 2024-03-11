@@ -1,6 +1,6 @@
 # Design Document
 
-By YOUR NAME HERE
+By Amog Rao, Mudit Surana, and Nimrat Kaur
 
 Video overview: <URL HERE>
 
