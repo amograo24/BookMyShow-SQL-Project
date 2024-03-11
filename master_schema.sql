@@ -179,7 +179,13 @@ BEGIN
     SET available_seats = (
         SELECT COUNT(*) 
         FROM Tickets 
-        WHERE show_id = OLD.show_id AND booked = 0
+        -- WHERE show_id = OLD.show_id AND booked = 0
+        WHERE show_id = (
+            SELECT DISTINCT show_id FROM Tickets 
+            JOIN Booking_Ticket ON Tickets.id = Booking_Ticket.ticket_id 
+            WHERE Booking_Ticket.booking_id = OLD.id
+        ) AND booked = 0
+        
     )
     -- WHERE id = OLD.ticket_id.show_id;
     WHERE id = (
@@ -210,7 +216,18 @@ BEGIN
     SET available_seats = (
         SELECT COUNT(*) 
         FROM Tickets 
-        WHERE show_id = NEW.show_id AND booked = 0
+        WHERE show_id = (
+            SELECT DISTINCT show_id FROM Tickets 
+            JOIN Booking_Ticket ON Tickets.id = Booking_Ticket.ticket_id 
+            WHERE Booking_Ticket.booking_id = NEW.id
+        )
+        -- WHERE show_id = ( -- other alternative would be join
+        --     SELECT DISTINCT show_id FROM Tickets
+        --     WHERE ticket_id IN (
+        --         SELECT ticket_id FROM bookings_tickets
+        --         WHERE booking_id = NEW.id
+        --     )
+        -- ) AND booked = 0
     )
     -- WHERE id = NEW.show_id;
     WHERE id = (

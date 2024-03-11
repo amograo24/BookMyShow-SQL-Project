@@ -16,11 +16,11 @@ INSERT INTO Languages (name) VALUES ('English');
 
 -- Movies
 INSERT INTO Movies (id, title, director, avg_rating, release_date, duration, certification)
-VALUES ('MV001', 'The Pursuit of Happiness', 'Gabriele Muccino', 7.8, '2006-12-15', '01:57:00', 'PG-13');
+VALUES ('MV001', 'The Pursuit of Happiness', 'Gabriele Muccino', 7.8, '2006-12-15', '01:57:00', 'U/A');
 
 -- Reviews
-INSERT INTO Reviews (customer_id, movie_id, rating, comment)
-VALUES ('CUST001', 'MV001', 8.5, 'A heartwarming and inspirational story!'); 
+INSERT INTO Reviews (id, customer_id, movie_id, rating, comment)
+VALUES ('RV001','CUST001', 'MV001', 8.5, 'A heartwarming and inspirational story!'); 
 
 -- Theatres
 INSERT INTO Theatres (id, name, city_id, address)
@@ -35,8 +35,8 @@ INSERT INTO Seats (name, audi_id)
 VALUES ('B4', 'AUD001');
 
 -- Shows
-INSERT INTO Shows (id, movie_id, audi_id, time_start, time_end, available_seats)
-VALUES ('SHOW001', 'MV001', 'AUD001', '2024-03-16 18:00:00', '2024-03-16 20:57:00', 30);  
+INSERT INTO Shows (id, movie_id, audi_id, time_start, time_end)
+VALUES ('SHOW001', 'MV001', 'AUD001', '2024-03-16 18:00:00', '2024-03-16 20:57:00');  
 
 -- Tickets
 INSERT INTO Tickets (id, show_id, seat_id, price) -- Assuming seat exists
