@@ -33,7 +33,7 @@ WHERE Shows.time_start >= DATE('now', '-7 days')
 GROUP BY Movies.title;
 
 /*no. of tickets sold in the last week by (start) time of the show*/
-SELECT 
+SELECT
     CASE 
         WHEN time_start >= TIME('06:00:00') AND time_start < TIME('09:00:00') THEN '6AM-9AM'
         WHEN time_start >= TIME('09:00:00') AND time_start < TIME('12:00:00') THEN '9AM-12PM'
@@ -41,14 +41,15 @@ SELECT
         WHEN time_start >= TIME('15:00:00') AND time_start < TIME('18:00:00') THEN '3PM-6PM'
         WHEN time_start >= TIME('18:00:00') AND time_start < TIME('21:00:00') THEN '6PM-9PM'
         WHEN time_start >= TIME('21:00:00') AND time_start < TIME('24:00:00') THEN '9PM-12AM'
-        -- ... Add more time ranges
-        ELSE 'Other' 
+        ELSE 'Other'
     END AS time_period,
     COUNT(*) as tickets_sold
 FROM Tickets
 JOIN Shows ON Tickets.show_id = Shows.id
-WHERE Shows.time_start >= DATE('now', '-7 days')
+WHERE Shows.time_start >= DATE('now', '-7 days') 
 GROUP BY time_period;
+
+
 
 /*total tickets sold for a movie in its run time*/
 SELECT
