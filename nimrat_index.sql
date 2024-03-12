@@ -1,7 +1,7 @@
 -- Optimize trigger on update available seats, only slows down the initialization of seats
 CREATE INDEX show_seats ON Shows(available_seats)
 CREATE INDEX audi_seat ON Seats(audi_id)
-CREATE INDEX ticket_seat ON Tickters(seat_id)
+CREATE INDEX ticket_seat ON Tickets(seat_id)
 
 -- Optimize on updating ticket status, only slows down ticket generation
 CREATE INDEX update_booked ON Tickets(booked)
