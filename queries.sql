@@ -53,7 +53,7 @@ SELECT
 FROM Tickets 
 JOIN Shows ON Tickets.show_id = Shows.id
 JOIN Movies ON Shows.movie_id = Movies.id
-WHERE Movies.title = 'The Pursuit of Happiness' -- Replace with the movie title
+WHERE Movies.title = 'Baahubali: The Beginning' -- Replace with the movie title
 GROUP BY Movies.title;
 
 /*net revenue by movie*/
