@@ -349,3 +349,10 @@ WHERE Shows.time_start >= datetime('now','-7 days') AND Tickets.booked = TRUE
 GROUP BY Movies.title
 ORDER BY tickets_sold DESC;
 
+-- Optimize trigger on update available seats
+CREATE INDEX show_seats ON Shows(available_seats);
+CREATE INDEX audi_seat ON Seats(audi_id);
+-- Optimize on updating ticket status
+CREATE INDEX update_booked ON Tickets(booked);
+-- Optimize box office calculations
+CREATE INDEX ticket_price ON Tickets(price);
