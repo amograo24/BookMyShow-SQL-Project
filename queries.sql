@@ -37,10 +37,10 @@ SELECT
     CASE 
         WHEN time_start >= TIME('06:00:00') AND time_start < TIME('09:00:00') THEN '6AM-9AM'
         WHEN time_start >= TIME('09:00:00') AND time_start < TIME('12:00:00') THEN '9AM-12PM'
-        WHEN time_start >= TIME('12:00:00') AND time_start < TIME('15:00:00') THEN '6AM-9AM'
-        WHEN time_start >= TIME('15:00:00') AND time_start < TIME('18:00:00') THEN '9AM-12PM'
-        WHEN time_start >= TIME('18:00:00') AND time_start < TIME('21:00:00') THEN '6AM-9AM'
-        WHEN time_start >= TIME('21:00:00') AND time_start < TIME('24:00:00') THEN '9AM-12PM'
+        WHEN time_start >= TIME('12:00:00') AND time_start < TIME('15:00:00') THEN '12PM-3PM'
+        WHEN time_start >= TIME('15:00:00') AND time_start < TIME('18:00:00') THEN '3PM-6PM'
+        WHEN time_start >= TIME('18:00:00') AND time_start < TIME('21:00:00') THEN '6PM-9PM'
+        WHEN time_start >= TIME('21:00:00') AND time_start < TIME('24:00:00') THEN '9PM-12AM'
         -- ... Add more time ranges
         ELSE 'Other' 
     END AS time_period,
