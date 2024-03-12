@@ -118,6 +118,7 @@ CREATE TABLE IF NOT EXISTS Bookings (
   status VARCHAR(20) NOT NULL CHECK (status IN ('booked', 'cancelled', 'held', 'dropped')), -- held ka dekhna padega
   booking_datetime DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (customer_id) REFERENCES Customers(id)
+  -- we need to add another check: cancellation should be permitted only before the show time starts
 );
 
 -- Movie_Genre Table (Many-to-Many)

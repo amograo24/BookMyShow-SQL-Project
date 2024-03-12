@@ -1,0 +1,4 @@
+id,customer_id,status,booking_datetime
+"BK001","CUS001","booked","2024-03-12 10:00:00"
+"BK002","CUS002","booked","2024-03-12 11:30:00"
+"BK003","CUS003","booked","2024-03-12 13:00:00"

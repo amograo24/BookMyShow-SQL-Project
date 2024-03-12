@@ -1,0 +1,9 @@
+id,title,director,avg_rating,release_date,duration,certification
+"INDMV001","Dangal","Nitesh Tiwari",8.5,"2016-12-23","02:41:00","U"
+"INDMV002","PK","Rajkumar Hirani",8.1,"2014-12-19","02:33:00","U"
+"INDMV003","Baahubali: The Beginning","S.S. Rajamouli",8.1,"2015-07-10","02:39:00","U/A"
+"INDMV004","3 Idiots","Rajkumar Hirani",8.4,"2009-12-25","02:50:00","U"
+"INDMV005","Padmaavat","Sanjay Leela Bhansali",7.0,"2018-01-25","02:43:00","U/A"
+"INDMV006","Gully Boy","Zoya Akhtar",8.2,"2019-02-14","02:33:00","U/A"
+"INDMV007","Lagaan","Ashutosh Gowariker",8.1,"2001-06-15","03:44:00","U"
+"INDMV008","Bajrangi Bhaijaan","Kabir Khan",8.0,"2015-07-17","02:43:00","U"
