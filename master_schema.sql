@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS Movies (
   id VARCHAR(20) PRIMARY KEY NOT NULL,
   title VARCHAR(255) NOT NULL,
   director VARCHAR(255),
-  avg_rating DECIMAL(4, 2), -- this we gotta check once
+  avg_rating DECIMAL(4, 2), 
   release_date DATE NOT NULL, -- 'yyyy-mm-dd'
   duration TIME NOT NULL, -- 'hh:mm:ss'
   certification VARCHAR(3) NOT NULL CHECK (certification IN ('U', 'U/A', 'A', 'S')),
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS Movies (
 -- Rating Table (Review Table)
 CREATE TABLE IF NOT EXISTS Reviews (
   id VARCHAR(40) PRIMARY KEY NOT NULL,
-  customer_id VARCHAR(30),  -- can be null as anonymous comment?
+  customer_id VARCHAR(30), 
   movie_id VARCHAR(20) NOT NULL,
   rating DECIMAL(4, 2) NOT NULL,
   time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,  
@@ -93,7 +93,6 @@ CREATE TABLE IF NOT EXISTS Shows (
   audi_id VARCHAR(30) NOT NULL,
   time_start DATETIME NOT NULL,
   time_end DATETIME NOT NULL,
-  -- available_seats INTEGER NOT NULL DEFAULT (SELECT COUNT(*) FROM Seats WHERE audi_id = Shows.audi_id),
   available_seats INTEGER NOT NULL DEFAULT 0,
   FOREIGN KEY (movie_id) REFERENCES Movies(id),
   FOREIGN KEY (audi_id) REFERENCES Audis(id),
@@ -115,10 +114,9 @@ CREATE TABLE IF NOT EXISTS Tickets (
 CREATE TABLE IF NOT EXISTS Bookings (
   id VARCHAR(40) PRIMARY KEY,
   customer_id VARCHAR(30) NOT NULL,
-  status VARCHAR(20) NOT NULL CHECK (status IN ('booked', 'cancelled', 'held', 'dropped')), -- held ka dekhna padega
+  status VARCHAR(20) NOT NULL CHECK (status IN ('booked', 'cancelled', 'held', 'dropped')),
   booking_datetime DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (customer_id) REFERENCES Customers(id)
-  -- we need to add another check: cancellation should be permitted only before the show time starts
 );
 
 -- Movie_Genre Table (Many-to-Many)
@@ -304,13 +302,12 @@ SELECT
         WHEN HOUR(Shows.time_start) >= 21 AND HOUR(Shows.time_start) < 24 THEN '9PM-12AM'
         WHEN HOUR(Shows.time_start) >= 0 AND HOUR(Shows.time_start) < 3 THEN '12AM-3AM'
         WHEN HOUR(Shows.time_start) >= 3 AND HOUR(Shows.time_start) < 6 THEN '3AM-6AM'
-        -- ... Add more cases for further periods
-        -- ELSE 'Other' 
+
     END AS time_period, 
     COUNT(*) AS tickets_sold
 FROM Shows
 JOIN Tickets ON Shows.id = Tickets.show_id 
-WHERE Tickets.booked = TRUE -- Assuming 'booked' indicates a confirmed sale
+WHERE Tickets.booked = TRUE 
 GROUP BY sale_date, time_period;
 
 
