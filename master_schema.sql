@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS Audis (
 
 -- Seats Table
 CREATE TABLE IF NOT EXISTS Seats (
-  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  id VARCHAR(40) PRIMARY KEY NOT NULL,
   name VARCHAR(5) NOT NULL,
   audi_id VARCHAR(30) NOT NULL,
   FOREIGN KEY (audi_id) REFERENCES Audis(id)
@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS Bookings (
 );
 
 -- Movie_Genre Table (Many-to-Many)
-CREATE TABLE IF NOT EXISTS Movie_Genre (
+CREATE TABLE IF NOT EXISTS Movies_Genres (
   movie_id VARCHAR(20) NOT NULL,
   genre_id INTEGER NOT NULL,
   FOREIGN KEY (movie_id) REFERENCES Movies(id),
@@ -131,16 +131,16 @@ CREATE TABLE IF NOT EXISTS Movie_Genre (
 );
 
 -- Movie_Language Table (Many-to-Many)
-CREATE TABLE IF NOT EXISTS Movie_Language (
+CREATE TABLE IF NOT EXISTS Movies_Languages (
   movie_id VARCHAR(20) NOT NULL,
-  language_id INTEGER NOT NULL,
+  lang_id INTEGER NOT NULL,
   FOREIGN KEY (movie_id) REFERENCES Movies(id),
-  FOREIGN KEY (language_id) REFERENCES Languages(id),
-  PRIMARY KEY (movie_id, language_id)
+  FOREIGN KEY (lang_id) REFERENCES Languages(id),
+  PRIMARY KEY (movie_id, lang_id)
 );
 
 -- Movie_Language Table (Many-to-Many)
-CREATE TABLE IF NOT EXISTS Booking_Ticket (
+CREATE TABLE IF NOT EXISTS Bookings_Tickets (
   booking_id VARCHAR(40) NOT NULL,
   ticket_id VARCHAR(40) NOT NULL,
   FOREIGN KEY (booking_id) REFERENCES Bookings(id),
