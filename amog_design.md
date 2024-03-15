@@ -52,7 +52,7 @@ There are 8 major functional requirements that this database satisfies:
 
 So in a nutshell, the user has the ability to register an account, select movie shows of prefernce, choose a seat, and book a set of tickets. Additionally these bookings may also be cancelled. The user also has the ability to obtain movies of particular genres or languages. Furthermore, the user can write reviews and provide ratings for movies, and can take a look at the box office of several movies.
 
-Booking beverages, setting a configuration of seats within the auditorium, maintaining seperate tables for employees, curating a list of cast & crew for several films in a dedicated table, are all out of **scope for this project**.
+Booking beverages, setting a configuration of seats within the auditorium, maintaining seperate tables for employees, curating a list of cast & crew for several films in a dedicated table, are all **out of scope for this project**.
 
 ## Representation
 
