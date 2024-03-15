@@ -171,7 +171,7 @@ BEGIN
     SET booked = 0
     WHERE id IN (
         SELECT ticket_id
-        FROM Booking_Ticket
+        FROM Bookings_Tickets
         WHERE booking_id = OLD.id
     );
 
@@ -179,21 +179,18 @@ BEGIN
     SET available_seats = (
         SELECT COUNT(*) 
         FROM Tickets 
-        -- WHERE show_id = OLD.show_id AND booked = 0
         WHERE show_id = (
             SELECT DISTINCT show_id FROM Tickets 
-            JOIN Booking_Ticket ON Tickets.id = Booking_Ticket.ticket_id 
-            WHERE Booking_Ticket.booking_id = OLD.id
+            JOIN Bookings_Tickets ON Tickets.id = Bookings_Tickets.ticket_id 
+            WHERE Bookings_Tickets.booking_id = OLD.id
         ) AND booked = 0
-        
     )
-    -- WHERE id = OLD.ticket_id.show_id;
     WHERE id = (
         SELECT show_id
         FROM Tickets
         WHERE id = (
             SELECT ticket_id
-            FROM Booking_Ticket
+            FROM Bookings_Tickets
             WHERE booking_id = OLD.id
         )
     );
@@ -208,7 +205,7 @@ BEGIN
     SET booked = 1
     WHERE id IN (
         SELECT ticket_id
-        FROM Booking_Ticket
+        FROM Bookings_Tickets
         WHERE booking_id = NEW.id
     );
 
@@ -218,8 +215,8 @@ BEGIN
         FROM Tickets 
         WHERE show_id = (
             SELECT DISTINCT show_id FROM Tickets 
-            JOIN Booking_Ticket ON Tickets.id = Booking_Ticket.ticket_id 
-            WHERE Booking_Ticket.booking_id = NEW.id
+            JOIN Bookings_Tickets ON Tickets.id = Bookings_Tickets.ticket_id 
+            WHERE Bookings_Tickets.booking_id = NEW.id
         )
     )
     WHERE id = (
@@ -227,7 +224,7 @@ BEGIN
         FROM Tickets
         WHERE id = (
             SELECT ticket_id
-            FROM Booking_Ticket
+            FROM Bookings_Tickets
             WHERE booking_id = NEW.id
         )
     );
@@ -261,7 +258,7 @@ SELECT S.movie_id, SUM(T.price) AS total_box_office
 FROM Shows S
 JOIN Tickets T ON S.id = T.show_id
 JOIN
-Booking_Ticket BT ON T.id = BT.ticket_id
+Bookings_Tickets BT ON T.id = BT.ticket_id
 JOIN Bookings B ON BT.booking_id = B.id
 WHERE B.status = 'booked'
 GROUP BY S.movie_id;
@@ -270,7 +267,7 @@ CREATE VIEW LastMonthBoxOffice AS
 SELECT S.movie_id, SUM(T.price) AS weekly_box_office
 FROM Shows S
 JOIN Tickets T ON S.id = T.show_id
-JOIN Booking_Ticket BT ON T.id = BT.ticket_id
+JOIN Bookings_Tickets BT ON T.id = BT.ticket_id
 JOIN Bookings B ON BT.booking_id = B.id
 WHERE B.status = 'booked' AND S.time_start >= datetime('now','-1 month')
 GROUP BY S.movie_id;
@@ -280,7 +277,7 @@ CREATE VIEW LastWeekBoxOffice AS
 SELECT S.movie_id, SUM(T.price) AS weekly_box_office
 FROM Shows S
 JOIN Tickets T ON S.id = T.show_id
-JOIN Booking_Ticket BT ON T.id = BT.ticket_id
+JOIN Bookings_Tickets BT ON T.id = BT.ticket_id
 JOIN Bookings B ON BT.booking_id = B.id
 WHERE B.status = 'booked' AND S.time_start >= datetime('now','-7 days')
 GROUP BY S.movie_id;
